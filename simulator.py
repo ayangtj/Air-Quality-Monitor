@@ -1,10 +1,11 @@
 
 import datetime
+import time
 import random
-import numpy
-import pandas as pd 
+import numpy as np
 
 
+'''
 dateTime = datetime.datetime.now()
 timestamp = dateTime.isoformat('|')[0:18]
 
@@ -15,7 +16,7 @@ for i in range(0, 500):
 print(timestamp, random_reading) 
 
 # sensor_data = (timestamp, round(n, 3))
-
+'''
 
 
 
@@ -47,3 +48,33 @@ for x in range(500):
 
 
 
+curr_t = datetime.datetime(2020, 6, 10, 10, 0, 0, 0)
+print('start simulation at', curr_t)
+t_list = []
+v_list = []
+
+for i in range(100):
+    tdelta = datetime.timedelta(seconds=random.random() + 0.5)
+    curr_t = curr_t + tdelta
+    reading = random.random() * 150 # based on realistic pm2.5 values
+    print(curr_t, reading)
+    t_list.append(curr_t)
+    v_list.append(reading)
+
+
+t_arr = np.array(t_list)
+v_arr = np.array(v_list)
+
+def find_index_of_most_recent(datetime_array, datetime_obj):
+    tup = np.where(datetime_array < datetime_obj)
+    index_array = tup[0]
+    idx = index_array[-1] # last index of index array
+    return idx
+
+
+now = datetime.datetime(2020, 6, 10, 10, 0, 30, 234)
+find_index_of_most_recent_timestamp = find_index_of_most_recent(t_arr, now)
+idx = find_index_of_most_recent_timestamp
+most_recent_timestamp = t_arr[idx]
+most_recent_value = v_arr[idx]
+print(now, most_recent_timestamp, most_recent_value)
