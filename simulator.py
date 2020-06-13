@@ -3,6 +3,8 @@ import datetime
 import time
 import random
 import numpy as np
+import pandas as pd
+from matplotlib import pyplot as plt 
 
 
 '''
@@ -53,17 +55,29 @@ print('start simulation at', curr_t)
 t_list = []
 v_list = []
 
-for i in range(100):
+for i in range(3600):
     tdelta = datetime.timedelta(seconds=random.random() + 0.5)
     curr_t = curr_t + tdelta
-    reading = random.random() * 150 # based on realistic pm2.5 values
+    reading = random.random() * 500 # based on realistic pm2.5 values
     print(curr_t, reading)
     t_list.append(curr_t)
     v_list.append(reading)
 
 
-t_arr = np.array(t_list)
-v_arr = np.array(v_list)
+t_arr = np.array(t_list) #x plot
+v_arr = np.array(v_list) # y plot 
+
+columes = ['Timestamp', 'pm2.5']
+
+sensor_data_dict = {
+    'Timestamp': t_arr,
+    'pm2.5': v_arr
+}
+
+df= pd.DataFrame(sensor_data_dict)
+df.to_csv('1hr_sim.csv')
+
+
 
 def find_index_of_most_recent(datetime_array, datetime_obj):
     tup = np.where(datetime_array < datetime_obj)
@@ -72,7 +86,7 @@ def find_index_of_most_recent(datetime_array, datetime_obj):
     return idx
 
 
-now = datetime.datetime(2020, 6, 10, 10, 0, 30, 234)
+now = datetime.datetime(2020, 6, 10, 10, 5, 30, 234)
 find_index_of_most_recent_timestamp = find_index_of_most_recent(t_arr, now)
 idx = find_index_of_most_recent_timestamp
 most_recent_timestamp = t_arr[idx]
