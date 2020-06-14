@@ -5,7 +5,7 @@
 #Save each plot as a png  (5min.png, 10min.png and 30min.png)
 
 
-from matplotlib import pyplot
+from matplotlib import pyplot as plt 
 import pandas as pd 
 
 
@@ -18,29 +18,10 @@ import numpy as np
 
 
 
-#historical data in the past 30 minutes
-curr_t = datetime.datetime(2020, 6, 10, 10, 0, 0, 0)
-print('start simulation at', curr_t)
-t_list = []
-v_list = []
-
-for i in range(18):
-    tdelta = datetime.timedelta(seconds=random.random() + 100)
-    curr_t = curr_t + tdelta
-    reading = random.random() * 150 # based on realistic pm2.5 values
-    print(curr_t, reading)
-    t_list.append(curr_t)
-    v_list.append(reading)
+df = pd.read_csv('1hr_sim.csv')
+df
 
 
-t_arr = np.array(t_list)
-v_arr = np.array(v_list)
-
-def find_index_of_most_recent(datetime_array, datetime_obj):
-    tup = np.where(datetime_array < datetime_obj)
-    index_array = tup[0]
-    idx = index_array[-1] # last index of index array
-    return idx
-
-
-
+p = df.plot(x='Timestamp', y='pm2.5', marker='.')
+plt.show()
+plt.savefig('1hr.png')
