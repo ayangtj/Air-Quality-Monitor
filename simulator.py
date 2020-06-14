@@ -78,28 +78,3 @@ df= pd.DataFrame(sensor_data_dict)
 df.to_csv('1hr_sim.csv')
 
 
-
-def find_index_of_most_recent(datetime_array, datetime_obj):
-    tup = np.where(datetime_array < datetime_obj)
-    index_array = tup[0]
-    idx = index_array[-1] # last index of index array
-    return idx
-
-
-now = datetime.datetime(2020, 6, 10, 10, 5, 30, 234)
-find_index_of_most_recent_timestamp = find_index_of_most_recent(t_arr, now)
-idx = find_index_of_most_recent_timestamp
-most_recent_timestamp = t_arr[idx]
-most_recent_value = v_arr[idx]
-print(now, most_recent_timestamp, most_recent_value)
-
-
-def current_quality(most_recent_value):
-    if most_recent_value < 25: 
-        print("Current air quality is Healthy")
-    elif 25 <= most_recent_value < 100: 
-        print("Current air quality is Moderate")
-    else: 
-        print("Current air quality is Unhealthy")
-     
-current_quality(most_recent_value)
