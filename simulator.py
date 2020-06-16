@@ -75,6 +75,6 @@ sensor_data_dict = {
 }
 
 df= pd.DataFrame(sensor_data_dict)
-df.to_csv('1hr_sim.csv')
+df.to_pickle('1hr_sim.p')
 
 
