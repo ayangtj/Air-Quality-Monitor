@@ -7,7 +7,7 @@ import pandas as pd
 from matplotlib import pyplot as plt 
 
 
-df = pd.read_csv('1hr_sim.csv')
+df = pd.read_pickle('1hr_sim.p')
 df
 
 def find_index_of_most_recent(datetime_array, datetime_obj):
@@ -23,22 +23,25 @@ def get_curr_value(lookup_time, df):
     idx = find_index_of_most_recent_timestamp
     most_recent_timestamp = t_arr[idx]
     most_recent_value = v_arr[idx]
-    print(most_recent_timestamp, most_recent_value)
+    #print(most_recent_timestamp, most_recent_value)
     return most_recent_timestamp, most_recent_value
 
-t = datetime.datetime(2020, 6, 10, 10, 5, 30, 234)
-lookup_time = t.strftime('%y-%m-%d %I:%M:%S.%f')
+lookup_time = datetime.datetime(2020, 6, 10, 10, 5, 30, 234)
+#lookup_time = t.strftime('%y-%m-%d %I:%M:%S.%f')
 get_curr_value(lookup_time, df)
 
+a = get_curr_value(lookup_time, df)
+a
 
 
-
-def current_quality(most_recent_value):
-    if most_recent_value < 25: 
-        print("Current air quality is Healthy")
-    elif 25 <= most_recent_value < 100: 
-        print("Current air quality is Moderate")
+#defining air quality indicator
+def current_quality(a, indicator_value):
+    if indicator_value < 100: 
+        print(a, "Current air quality is Healthy")
+    elif 100 <= indicator_value < 250: 
+        print(a, "Current air quality is Moderate")
     else: 
-        print("Current air quality is Unhealthy")
-     
-current_quality(most_recent_value)
+        print(a, "Current air quality is Unhealthy")
+
+indicator_value = get_curr_value(lookup_time, df)[-1]    
+current_quality(a, indicator_value)
