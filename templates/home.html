@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Air Quality Monitor</title>
-</head>
-<body>
-    <p>request.args['a'] + request.args['indicator_value']</p>
-    <form action='/' method='GET'>
-        <input type="text" name='Update'>
-        <input type='submit' value='Update'>
-    </form>
-</body>
-</html>
+{% extends 'base.html %}
+{% block title %}
+    Air Quality Monitor 
+{% endblock %}
+{% block content %}
+    <h1>Air Quality Monitor</h1>
+    <image src='{{url_for('static', filename='images/5min.png')}}></image>
+{% endblock %}
