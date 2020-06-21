@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} {% endblock %</title>
+    <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
-    {% block content %}
-    {% endblock %}
+ {{ air_time}}
+ <br>
+ Air quality: {{ air_qual_val }} 
+ <br>
+ {{ air_qual_class }} 
+ 
+    <form action='/' method='GET'>
+        Average window:
+        <input type='text' value='1' size='{{ win_size }}' name='win_size'><br>
+    
+        <input type='submit' value='Press the button to get an update'>
+    </form>
+    
 </body>
 </html>
