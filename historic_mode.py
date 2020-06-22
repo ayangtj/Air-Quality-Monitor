@@ -23,8 +23,9 @@ df
 type(df)
 
 p = df.plot(x='Timestamp', y='pm2.5', marker='.')
-plt.show()
+
 plt.savefig('1hr.png')
+plt.show()
 
 
 
@@ -48,8 +49,9 @@ type(df_10)
 df_10 = get_past_10_min(t10_time, df)
 '''
 p10 = df_10.plot(x='Timestamp', y='pm2.5', marker='.')
-plt.show() 
+
 plt.savefig('10min.png')
+plt.show() #exchanged the postion of show and savefig so immediate image plotted will be saved first then displayed to avoid saving empty new image
 
 
 # past 30 min
@@ -64,8 +66,9 @@ df_30
 
 
 p30 = df_30.plot(x='Timestamp', y='pm2.5', marker='.')
-plt.show() 
+#plt.show() 
 plt.savefig('30min.png')
+plt.show() 
 
 
 # past 50 min
@@ -80,5 +83,6 @@ df_5
 
 
 p5 = df_5.plot(x='Timestamp', y='pm2.5', marker='.')
-plt.show() 
+#plt.show() 
 plt.savefig('5min.png')
+plt.show() 
