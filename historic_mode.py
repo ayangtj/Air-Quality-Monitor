@@ -58,7 +58,7 @@ def get_past_30_min(t30_time):
     return past_30_min
 
 t30_time = datetime.datetime(2020, 6, 10, 10, 30, 0, 0)
-df_30 = get_past_30_min(t10_time)
+df_30 = get_past_30_min(t30_time)
 df_30
 
 
