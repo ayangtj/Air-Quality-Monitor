@@ -8,9 +8,9 @@
 <body>
  {{ air_time}}
  <br>
- Air quality: {{ air_qual_val }} 
- <br>
- {{ air_qual_class }} 
+ <h3>Air quality: {{ air_qual_val }} </h3>
+ 
+ <h4>{{ air_qual_class }} </h4>
  
     <form action='/' method='GET'>
         Average window:
@@ -18,6 +18,22 @@
     
         <input type='submit' value='Press the button to get an update'>
     </form>
-    
+ <br>
+ <br>
+ <br>
+
+<h3>Air Quality History Snapshot</h3>
+<form action='/five_min' method='GET'>
+    <input type='submit' value='Past Five Minutes'>
+</form>
+
+<form action='/ten_min' method='GET'>
+    <input type='submit' value='Past Ten Minutes'>
+</form>
+
+<form action='/thirty_min' method='GET'>
+    <input type='submit' value='Past Thirty Minutes'>
+</form>
+
 </body>
 </html>
