@@ -24,7 +24,7 @@ def get_index_of_most_recent_timestamp(datetime_array, datetime_obj):
 
 
 def get_curr_value(current_time, df):
-    ''' finds the pm2.5 value in dataframe df that was most recently taken before Timestamp.
+    '''finds the pm2.5 value in dataframe df that was most recently taken before Timestamp.
     returns that most recent timestamp and its pm2.5 value'''
     t_arr = df['Timestamp']
     v_arr = df['pm2.5']
