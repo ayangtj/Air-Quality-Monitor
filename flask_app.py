@@ -62,27 +62,38 @@ def current_quality(curr_time, indicator_value):
 
 
 app = Flask(__name__)
-start_time = datetime.datetime(2020, 6, 10, 10, 5, 0, 234)
+start_time = datetime.datetime(2020, 6, 10, 10, 5, 0, 234) # get this from file! + 5 secs
 current_time = start_time
-win_size = 1 # window size for lookup
+
 
 @app.route('/')
 def home():
-    global current_time, win_size
+    global current_time
     # current initially is the same as start, every time we trigger /, we add some seconds 
-    current_time += datetime.timedelta(seconds=30) # could be random num seconds
+    current_time += datetime.timedelta(seconds=5) # could be random num seconds
     print("current time", current_time)
-    lookup_time, air_qual_val = get_curr_value(current_time, df) # lookup is when the reported sample was actually taken
-    #indicator_value = get_curr_value(current_time, df)[-1]  # not needed
+
+    # check average for last 5 secs for email
+    win_size = 5
+    total = 0
+    for n in range(-win_size+1, 1): # last win_size secs
+        t = datetime.timedelta(seconds=n)
+        lookup_time, air_qual_val = get_curr_value(current_time+t, df) # lookup is when the reported sample was actually taken
+        total += air_qual_val 
+    avg_air_qual_val = total / win_size   # avg!
+    # if avg_air_qual_val > 250:
+    #   <trigger email>
+    
+    # get last sec
+    lookup_time, air_qual_val = get_curr_value(current_time, df)
     air_qual_class = current_quality(current_time, air_qual_val)
     air_qual_val  = round(air_qual_val, 2) # I'm doing this after the classification
-                                           # b/c you want the true value for thatdatetime A combination of a date and a time. Attributes: () 
+                                           # b/c you want the true value for that datetime A combination of a date and a time. Attributes: () 
                                            # the round is just a cosmetic thing
     air_qual_msg = f"Air quality is {air_qual_class}"
     air_time_msg = "Time reported sample was taken: " + lookup_time.strftime("%m/%d/%Y, %H:%M:%S")
 
     return render_template('base.html', 
-                            win_size=str(win_size), 
                             air_qual_val=str(air_qual_val),
                             air_qual_class=air_qual_msg,
                             air_time=air_time_msg,
@@ -91,6 +102,8 @@ def home():
 
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
+    global current_time
+    # make plot file in folder
     return render_template('five.html')
 
 @app.route('/ten_min', methods=['GET', 'POST'])
