@@ -69,8 +69,13 @@ current_time = start_time
 @app.route('/')
 def home():
     global current_time
-    # current initially is the same as start, every time we trigger /, we add some seconds 
-    current_time += datetime.timedelta(seconds=5) # could be random num seconds
+
+    try:
+        add_secs = float(request.args["add_secs"]) # jump ahead X seconds
+    except:
+        add_secs = 3 # add_secs was not used in URL, just assume real time mode of 3 sec jumps
+    
+    current_time += datetime.timedelta(seconds=add_secs) # jump x seconds ahead
     print("current time", current_time)
 
     # check average for last 5 secs for email
