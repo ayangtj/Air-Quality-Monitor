@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3" >
     <title>{% block title %} {% endblock %}</title>
 </head>
 <body>
@@ -13,10 +14,12 @@
  <h4>{{ air_qual_class }} </h4>
  
     <form action='/' method='GET'>
-        Average window:
-        <input type='text' value='1' size='{{ win_size }}' name='win_size'><br>
-    
-        <input type='submit' value='Press the button to get an update'>
+        <input type="hidden" name="add_secs" value="3">
+        <input type='submit' value='Set to real-time mode'>
+    </form>
+    <form action='/' method='GET'>
+        <input type="hidden" name="add_secs" value="30">
+        <input type='submit' value='Debug: set time jump to 30 secs'>
     </form>
  <br>
  <br>
