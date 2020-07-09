@@ -7,8 +7,9 @@ import numpy as np
 import pandas as pd
 import random as rd
 import datetime
+import os
 
-def generate_simulated_data(scale=90, offset=10, num_secs= 2000, random_state:int=42):
+def generate_simulated_data(scale=90, offset=10, num_secs= 2000, random_state=42):
     rnd_state = np.random.RandomState(random_state)
     time = np.arange(0, num_secs, 1) # 2000 samples
     pure = 200*np.sin(time/(30*np.pi)) # 1. number affects the amplitude, 2. the wavelength
@@ -59,8 +60,10 @@ def generate_simulated_data(scale=90, offset=10, num_secs= 2000, random_state:in
 # never below 20 never above 80 + 20
 # random state is unique, i.e. 100 will always give you the same sampling
 random_state = 45
-df = generate_simulated_data(scale=300, offset=30, num_secs=3600, random_state=random_state)
+df = generate_simulated_data(scale=400, offset=30, num_secs=3600, random_state=random_state)
 print(df.head())
 ax = sns.lineplot(x="Timestamp", y="pm2.5", data=df) #,  marker=".")
 df.to_pickle('1hr_sim.p')
+save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images'
+plt.savefig(save_images_to + 'new.png')
 plt.show()
