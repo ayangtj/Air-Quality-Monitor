@@ -1,11 +1,11 @@
 from flask import Flask, render_template, request, url_for, redirect 
-#from current_mode import current_quality
 import datetime
 import time
 import random
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt 
+import yagmail
 
 
 df = pd.read_pickle('1hr_sim.p')
@@ -36,9 +36,7 @@ def get_curr_value(current_time, df):
     return most_recent_timestamp, most_recent_value
 
 
-'''defining air quality indicator'''  # CH: not needed as you already have a doc string
-# Yes, it's weird to not have anything above the def so if you want you could have
-# some sort of header above it - but use normal # for that
+
 def current_quality(curr_time, indicator_value):
     """classifies air quality (indicator_value) at current time (curr_time)
        and returns a string: 'healthy', 'moderate', and 'unhealthy'.
@@ -53,18 +51,19 @@ def current_quality(curr_time, indicator_value):
 
     # Also, it's way more flexible to return just the 'core' message 
     # and leave it up to the caller to wrap that core into a nicer message. 
-    if indicator_value < 100: 
+    if indicator_value < 50: 
         return "Healthy"
-    elif 100 <= indicator_value < 250: 
+    elif 50 <= indicator_value < 150: 
         return "Moderate"
     else: 
         return "Unhealthy"
 
 
 app = Flask(__name__)
-start_time = datetime.datetime(2020, 6, 10, 10, 5, 0, 234) # get this from file! + 5 secs
+#start_time = datetime.datetime(2020, 6, 10, 10, 5, 0, 234) 
+start_time = df.loc[df.index[0], 'Timestamp'] + datetime.timedelta(seconds=5) # got this from file! + 5 secs
 current_time = start_time
-
+#print(current_time) = 10:00:06
 
 @app.route('/')
 def home():
@@ -78,16 +77,33 @@ def home():
     current_time += datetime.timedelta(seconds=add_secs) # jump x seconds ahead
     print("current time", current_time)
 
-    # check average for last 5 secs for email
     win_size = 5
     total = 0
     for n in range(-win_size+1, 1): # last win_size secs
         t = datetime.timedelta(seconds=n)
         lookup_time, air_qual_val = get_curr_value(current_time+t, df) # lookup is when the reported sample was actually taken
         total += air_qual_val 
-    avg_air_qual_val = total / win_size   # avg!
-    # if avg_air_qual_val > 250:
-    #   <trigger email>
+    avg_air_qual_val = total / win_size   # average value
+    avg_air_qual_val_reading = round(avg_air_qual_val, 2)
+    
+    #def send_email(self):
+    sender_email = 'aquser41@gmail.com' #email security reference has been adjusted for this project 
+    receiver_email = 'aquser41@gmail.com'
+
+    subject = 'Air Quality Alert'
+
+    sender_password = 'python#project1'
+        #fill in the password for the email to sent when triggered
+
+    yag = yagmail.SMTP(user=sender_email, password=sender_password)
+
+    contents = [
+        f"On {current_time}, your air quality became unhealthy. Air quality reading was averaging {avg_air_qual_val_reading}."
+    ]
+    if avg_air_qual_val > 150: # When avg_air_qual_val > 250, <triggers email>
+        yag.send(to=receiver_email, subject=subject, contents=contents)
+    else:
+        pass
     
     # get last sec
     lookup_time, air_qual_val = get_curr_value(current_time, df)
