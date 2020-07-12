@@ -124,17 +124,36 @@ def home():
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
     global current_time
-    # make plot file in folder
+    #wait until current_time > datetime.datetime(2020, 6, 10, 10, 5, 0, 0):
+    t5_time = current_time - datetime.timedelta(seconds=300)
+    #lookup_time_5, air_qual_val_5 = get_curr_value(t5_time, df)
+    #past_5_min = df.loc[t5_time < df['Timestamp'] < current_time]
+    past_5_min = df.loc((df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time))
+    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
+    plt.savefig(save_images_to + 'five.png')
+    plt.show()
     return render_template('five.html')
+      
 
 @app.route('/ten_min', methods=['GET', 'POST'])
 def ten_min():
+    global current_time
+    t10_time = current_time + datetime.timedelta(seconds=600)
+    past_10_min = df.loc((df['Timestamp'] > t10_time) & (df['Timestamp'] <= current_time))
+    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images'
+    plt.savefig(save_images_to + 'ten.png')
+    #plt.show()
     return render_template('ten.html')
 
 
 @app.route('/thirty_min', methods=['GET', 'POST'])
 def thirty_min():
-    return render_template('base.html')
+    t30_time = current_time + datetime.timedelta(seconds=1800)
+    past_30_min = df.loc((df['Timestamp'] > t30_time) & (df['Timestamp'] <= current_time))
+    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images'
+    plt.savefig(save_images_to + 'thirty.png')
+    #plt.show()
+    return render_template('thirty.html')
 
 
 # This is actually not needed, I just return to / directly
@@ -148,4 +167,4 @@ def main_return():
 
 # remove these 2 lines if you want to run this code on pythonanywhere
 if __name__ == '__main__':
-    app.run(debug=True, port=5004)
+    app.run(debug=True, port=5005)
