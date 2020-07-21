@@ -60,7 +60,7 @@ def generate_simulated_data(scale=90, offset=10, num_secs= 2000, random_state=42
 # never below 20 never above 80 + 20
 # random state is unique, i.e. 100 will always give you the same sampling
 random_state = 45
-df = generate_simulated_data(scale=400, offset=30, num_secs=3600, random_state=random_state)
+df = generate_simulated_data(scale=600, offset=30, num_secs=3600, random_state=random_state)
 print(df.head())
 ax = sns.lineplot(x="Timestamp", y="pm2.5", data=df) #,  marker=".")
 df.to_pickle('1hr_sim.p')
