@@ -1,10 +1,12 @@
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt 
 from flask import Flask, render_template, request, url_for, redirect 
 import datetime
 import time
 import random
 import numpy as np
 import pandas as pd
-from matplotlib import pyplot as plt 
 import yagmail
 
 
@@ -128,19 +130,23 @@ def five_min():
     t5_time = current_time - datetime.timedelta(seconds=300)
     #lookup_time_5, air_qual_val_5 = get_curr_value(t5_time, df)
     #past_5_min = df.loc[t5_time < df['Timestamp'] < current_time]
-    past_5_min = df.loc((df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time))
+    past_5_min = (df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time)
+    history_5 = df[past_5_min]
+    history_5.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
     plt.savefig(save_images_to + 'five.png')
-    plt.show()
+    #plt.show()
     return render_template('five.html')
       
 
 @app.route('/ten_min', methods=['GET', 'POST'])
 def ten_min():
     global current_time
-    t10_time = current_time + datetime.timedelta(seconds=600)
-    past_10_min = df.loc((df['Timestamp'] > t10_time) & (df['Timestamp'] <= current_time))
-    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images'
+    t10_time = current_time - datetime.timedelta(seconds=600)
+    past_10_min = (df['Timestamp'] > t10_time) & (df['Timestamp'] <= current_time)
+    history_10 = df[past_10_min]
+    history_10.plot(x='Timestamp', y='pm2.5', marker='.')
+    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
     plt.savefig(save_images_to + 'ten.png')
     #plt.show()
     return render_template('ten.html')
@@ -148,9 +154,12 @@ def ten_min():
 
 @app.route('/thirty_min', methods=['GET', 'POST'])
 def thirty_min():
-    t30_time = current_time + datetime.timedelta(seconds=1800)
-    past_30_min = df.loc((df['Timestamp'] > t30_time) & (df['Timestamp'] <= current_time))
-    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images'
+    global current_time
+    t30_time = current_time - datetime.timedelta(seconds=1800)
+    past_30_min = (df['Timestamp'] > t30_time) & (df['Timestamp'] <= current_time)
+    history_30 = df[past_30_min]
+    history_30.plot(x='Timestamp', y='pm2.5', marker='.')
+    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
     plt.savefig(save_images_to + 'thirty.png')
     #plt.show()
     return render_template('thirty.html')
@@ -167,4 +176,4 @@ def main_return():
 
 # remove these 2 lines if you want to run this code on pythonanywhere
 if __name__ == '__main__':
-    app.run(debug=True, port=5005)
+    app.run(debug=True, port=5006)
