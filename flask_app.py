@@ -63,7 +63,7 @@ def current_quality(curr_time, indicator_value):
 
 app = Flask(__name__)
 #start_time = datetime.datetime(2020, 6, 10, 10, 5, 0, 234) 
-start_time = df.loc[df.index[0], 'Timestamp'] + datetime.timedelta(seconds=5) # got this from file! + 5 secs
+start_time = df.loc[df.index[0], 'Timestamp'] + datetime.timedelta(seconds=500) # got this from file! + 5 secs
 current_time = start_time
 #print(current_time) = 10:00:06
 
@@ -122,18 +122,24 @@ def home():
                             air_time=air_time_msg,
                             )
 
+def get_past_X_min(curr_time, min, df):
+    ''' return subset of  the last min minutes in df, counting back from curr_time'''
+    time_in_past = current_time - datetime.timedelta(minutes=min)
+    return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)]   
 
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
     global current_time
     #wait until current_time > datetime.datetime(2020, 6, 10, 10, 5, 0, 0):
-    t5_time = current_time - datetime.timedelta(seconds=300)
+    #t5_time = current_time - datetime.timedelta(seconds=300)
     #lookup_time_5, air_qual_val_5 = get_curr_value(t5_time, df)
     #past_5_min = df.loc[t5_time < df['Timestamp'] < current_time]
-    past_5_min = (df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time)
-    history_5 = df[past_5_min]
+    #past_5_min = (df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time)
+    #history_5 = df[past_5_min]
+
+    history_5 = get_past_X_min(current_time, 5, df)
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
-    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
+    save_images_to = './static/images/' # this is relative to your AIR-QUALITY-MONITOR folder, which contains the server .py file
     plt.savefig(save_images_to + 'five.png')
     #plt.show()
     return render_template('five.html')
