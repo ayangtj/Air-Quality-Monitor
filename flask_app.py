@@ -10,6 +10,7 @@ import pandas as pd
 import yagmail
 
 
+
 df = pd.read_pickle('1hr_sim.p')
 
 def get_index_of_most_recent_timestamp(datetime_array, datetime_obj):
@@ -148,11 +149,9 @@ def five_min():
 @app.route('/ten_min', methods=['GET', 'POST'])
 def ten_min():
     global current_time
-    t10_time = current_time - datetime.timedelta(seconds=600)
-    past_10_min = (df['Timestamp'] > t10_time) & (df['Timestamp'] <= current_time)
-    history_10 = df[past_10_min]
+    history_10 = get_past_X_min(current_time, 10, df)
     history_10.plot(x='Timestamp', y='pm2.5', marker='.')
-    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
+    save_images_to = './static/images/'
     plt.savefig(save_images_to + 'ten.png')
     #plt.show()
     return render_template('ten.html')
@@ -161,11 +160,9 @@ def ten_min():
 @app.route('/thirty_min', methods=['GET', 'POST'])
 def thirty_min():
     global current_time
-    t30_time = current_time - datetime.timedelta(seconds=1800)
-    past_30_min = (df['Timestamp'] > t30_time) & (df['Timestamp'] <= current_time)
-    history_30 = df[past_30_min]
+    history_30 = get_past_X_min(current_time, 30, df)
     history_30.plot(x='Timestamp', y='pm2.5', marker='.')
-    save_images_to = '/Users/April/Library/Mobile Documents/com~apple~CloudDocs/HCI 584/Air-Quality-Monitor/static/images/'
+    save_images_to = './static/images/'
     plt.savefig(save_images_to + 'thirty.png')
     #plt.show()
     return render_template('thirty.html')
