@@ -68,6 +68,17 @@ start_time = df.loc[df.index[0], 'Timestamp'] + datetime.timedelta(seconds=500) 
 current_time = start_time
 #print(current_time) = 10:00:06
 
+
+# CH: make sure we know where the current folder of the app is:
+from os import getcwd, remove
+print("cwd is", getcwd())
+
+# remove all old pngs in static/images folder
+try:
+    remove("./static/images/*.png")
+except:
+    pass # ignore fail, if folder contained no pngs to delete
+
 @app.route('/')
 def home():
     global current_time
@@ -126,18 +137,12 @@ def home():
 def get_past_X_min(curr_time, min, df):
     ''' return subset of  the last min minutes in df, counting back from curr_time'''
     time_in_past = current_time - datetime.timedelta(minutes=min)
+    print("getting data for time from", time_in_past, 'to', curr_time) # DEBUG
     return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)]   
 
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
     global current_time
-    #wait until current_time > datetime.datetime(2020, 6, 10, 10, 5, 0, 0):
-    #t5_time = current_time - datetime.timedelta(seconds=300)
-    #lookup_time_5, air_qual_val_5 = get_curr_value(t5_time, df)
-    #past_5_min = df.loc[t5_time < df['Timestamp'] < current_time]
-    #past_5_min = (df['Timestamp'] > t5_time) & (df['Timestamp'] <= current_time)
-    #history_5 = df[past_5_min]
-
     history_5 = get_past_X_min(current_time, 5, df)
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/' # this is relative to your AIR-QUALITY-MONITOR folder, which contains the server .py file
