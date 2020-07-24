@@ -146,9 +146,11 @@ def five_min():
     history_5 = get_past_X_min(current_time, 5, df)
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/' # this is relative to your AIR-QUALITY-MONITOR folder, which contains the server .py file
-    plt.savefig(save_images_to + 'five.png')
+    ts = str(current_time.timestamp())
+    fname = "five_" + ts + ".png"
+    plt.savefig(save_images_to + fname)
     #plt.show()
-    return render_template('five.html')
+    return render_template('five.html', time=ts)
       
 
 @app.route('/ten_min', methods=['GET', 'POST'])
