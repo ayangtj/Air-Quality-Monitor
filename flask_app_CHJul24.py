@@ -69,15 +69,17 @@ current_time = start_time
 #print(current_time) = 10:00:06
 
 
-# CH: make sure we know where the current folder of the app is:
-from os import getcwd, remove
-print("cwd is", getcwd())
-
-# remove all old pngs in static/images folder
+# remove static/images folder and recreate it so we get rid of old images
+import shutil, os
 try:
-    remove("./static/images/*.png")
-except:
-    pass # ignore fail, if folder contained no pngs to delete
+    shutil.rmtree("./static/images")
+except Exception as e:
+    print(e) # no such folder exists, that's fine, ignore error
+try:
+    os.mkdir("./static/images")
+except Exception as e:  
+    print(e) # folder already exists, that's OK, ignore
+
 
 @app.route('/')
 def home():
