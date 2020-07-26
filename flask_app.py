@@ -69,15 +69,17 @@ current_time = start_time
 #print(current_time) = 10:00:06
 
 
-# CH: make sure we know where the current folder of the app is:
-from os import getcwd, remove
-print("cwd is", getcwd())
-
-# remove all old pngs in static/images folder
+# remove static/images folder and recreate it so we get rid of old images
+import shutil, os
 try:
-    remove("./static/images/*.png")
-except:
-    pass # ignore fail, if folder contained no pngs to delete
+    shutil.rmtree("./static/images")
+except Exception as e:
+    print(e) # no such folder exists, that's fine, ignore error
+try:
+    os.mkdir("./static/images")
+except Exception as e:  
+    print(e) # folder already exists, that's OK, ignore
+
 
 @app.route('/')
 def home():
@@ -146,9 +148,11 @@ def five_min():
     history_5 = get_past_X_min(current_time, 5, df)
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/' # this is relative to your AIR-QUALITY-MONITOR folder, which contains the server .py file
-    plt.savefig(save_images_to + 'five.png')
+    ts = str(int(current_time.timestamp()))
+    fname = save_images_to + ts + ".png"
+    plt.savefig(fname)
     #plt.show()
-    return render_template('five.html')
+    return render_template('five.html', img=fname)
       
 
 @app.route('/ten_min', methods=['GET', 'POST'])
@@ -157,9 +161,11 @@ def ten_min():
     history_10 = get_past_X_min(current_time, 10, df)
     history_10.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    plt.savefig(save_images_to + 'ten.png')
+    ts = str(int(current_time.timestamp()))
+    fname = save_images_to + ts + ".png"
+    plt.savefig(fname)
     #plt.show()
-    return render_template('ten.html')
+    return render_template('ten.html', img=fname)
 
 
 @app.route('/thirty_min', methods=['GET', 'POST'])
@@ -168,9 +174,11 @@ def thirty_min():
     history_30 = get_past_X_min(current_time, 30, df)
     history_30.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    plt.savefig(save_images_to + 'thirty.png')
+    ts = str(int(current_time.timestamp()))
+    fname = save_images_to + ts + ".png"
+    plt.savefig(fname)
     #plt.show()
-    return render_template('thirty.html')
+    return render_template('thirty.html', img=fname)
 
 
 # This is actually not needed, I just return to / directly
