@@ -161,9 +161,11 @@ def ten_min():
     history_10 = get_past_X_min(current_time, 10, df)
     history_10.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    plt.savefig(save_images_to + 'ten.png')
+    ts = str(int(current_time.timestamp()))
+    fname = save_images_to + ts + ".png"
+    plt.savefig(fname)
     #plt.show()
-    return render_template('ten.html')
+    return render_template('ten.html', img=fname)
 
 
 @app.route('/thirty_min', methods=['GET', 'POST'])
@@ -172,9 +174,11 @@ def thirty_min():
     history_30 = get_past_X_min(current_time, 30, df)
     history_30.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    plt.savefig(save_images_to + 'thirty.png')
+    ts = str(int(current_time.timestamp()))
+    fname = save_images_to + ts + ".png"
+    plt.savefig(fname)
     #plt.show()
-    return render_template('thirty.html')
+    return render_template('thirty.html', img=fname)
 
 
 # This is actually not needed, I just return to / directly

@@ -9,10 +9,14 @@ import numpy as np
 import pandas as pd
 import yagmail
 
-from package.functions import * 
-
+'''imports data simulator to generate data table'''
 from package.simulator import *
 
+'''imports funtions for current reading and historic reading'''
+from package.functions import * 
+
+
+'''unpacks simulated data table'''
 df = pd.read_pickle('1hr_sim.p')
 
 
@@ -24,7 +28,7 @@ current_time = start_time
 #print(current_time) = 10:00:06
 
 
-# remove static/images folder and recreate it so we get rid of old images
+'''remove static/images folder each time before server starts running, and recreate new image files to ensure the static folder serve the correct image files.'''
 import shutil, os
 try:
     shutil.rmtree("./static/images")
@@ -38,6 +42,14 @@ except Exception as e:
 
 @app.route('/')
 def home():
+    '''increase timestamp by 3 seconds each reading, dsipaly current time on the main page'''
+    '''takes the average reading of the past 5 seconds (-win_size+1, 1) as average air quality value. Send email to user when the average air quality value is above 150'''
+    '''email subject: Air Quality Alert 
+       sender's eamil: aquser41@gmail.com
+       receiver's email: aquser41@gmail.com
+       sender's email password: python#project1
+       email content: on xdate xtime, your air quality became unhealthy. Air quality reading was averaging x.'''
+    '''Display air quality value, air quality class, and air quality message in html file, render html template.'''
     global current_time
 
     try:
@@ -54,22 +66,22 @@ def home():
         t = datetime.timedelta(seconds=n)
         lookup_time, air_qual_val = get_curr_value(current_time+t, df) # lookup is when the reported sample was actually taken
         total += air_qual_val 
-    avg_air_qual_val = total / win_size   # average value
+    avg_air_qual_val = total / win_size   # average value of past 5 seconds 
     avg_air_qual_val_reading = round(avg_air_qual_val, 2)
     
-    '''Send email to user when past five sencnd's average reading is above 150'''
+    
     sender_email = 'aquser41@gmail.com' #email security reference has been adjusted  
-    receiver_email = 'aquser41@gmail.com'
+    receiver_email = 'aquser41@gmail.com' #this email address was created specifically for the purpose of this project 
 
-    subject = 'Air Quality Alert'
+    subject = 'Air Quality Alert' #email subject 
 
-    sender_password = 'python#project1'
+    sender_password = 'python#project1' #sender_email password 
         
 
-    yag = yagmail.SMTP(user=sender_email, password=sender_password)
+    yag = yagmail.SMTP(user=sender_email, password=sender_password) #using yagmail SMTP to send emails 
 
     contents = [
-        f"On {current_time}, your air quality became unhealthy. Air quality reading was averaging {avg_air_qual_val_reading}."
+        f"On {current_time}, your air quality became unhealthy. Air quality reading was averaging {avg_air_qual_val_reading}." #email content 
     ]
     if avg_air_qual_val > 150: # When avg_air_qual_val > 150, <triggers email>
         yag.send(to=receiver_email, subject=subject, contents=contents)
@@ -80,7 +92,7 @@ def home():
     lookup_time, air_qual_val = get_curr_value(current_time, df)
     air_qual_class = current_quality(current_time, air_qual_val)
     air_qual_val  = round(air_qual_val, 2) # I'm doing this after the classification
-                                           # b/c you want the true value for that datetime A combination of a date and a time. Attributes: () 
+                                           # to reflect the true value for that datetime A combination of a date and a time. Attributes: () 
                                            # the round is just a cosmetic thing
     air_qual_msg = f"Air quality is {air_qual_class}"
     air_time_msg = "Time reported sample was taken: " + lookup_time.strftime("%m/%d/%Y, %H:%M:%S")
@@ -93,61 +105,67 @@ def home():
 
 
 def get_past_X_min(curr_time, min, df):
-    ''' return subset of  the last min minutes in df, counting back from curr_time'''
+    ''' return subset of the last min minutes in df, counting backwards from curr_time to x seconds'''
     time_in_past = current_time - datetime.timedelta(minutes=min)
     print("getting data for time from", time_in_past, 'to', curr_time) # DEBUG
     return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)] 
 
 
 
-'''Get past five minutes of air quality and visulize data'''
+
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
+    '''return past five minutes of air quality and visulize data, save image genrated to static/iamge as png file
+        render html template'''
     global current_time
-    history_5 = get_past_X_min(current_time, 5, df)
+    history_5 = get_past_X_min(current_time, 5, df) #past 5 min
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
-    save_images_to = './static/images/' # this is relative to your AIR-QUALITY-MONITOR folder, which contains the server .py file
-    ts = str(int(current_time.timestamp()))
+    save_images_to = './static/images/' # saves img to relative static folder 
+    ts = str(int(current_time.timestamp())) #uses stringyfied current time timestamp as image file name when it's generated 
     fname = save_images_to + ts + ".png"
     plt.savefig(fname)
-    #plt.show()
+    #plt.show() for debugging
     return render_template('five.html', img=fname)
       
 
-'''Get past ten minutes of air quality and visulize data'''
+
 @app.route('/ten_min', methods=['GET', 'POST'])
 def ten_min():
+    '''return past ten minutes of air quality and visulize data, save image genrated to static/iamge as png file
+        render html template'''
     global current_time
-    history_10 = get_past_X_min(current_time, 10, df)
+    history_10 = get_past_X_min(current_time, 10, df) #past 10 min
     history_10.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    ts = str(int(current_time.timestamp()))
+    ts = str(int(current_time.timestamp())) #uses stringyfied current time timestamp as image file name when it's generated 
     fname = save_images_to + ts + ".png"
     plt.savefig(fname)
-    #plt.show()
+    #plt.show() for debugging
     return render_template('ten.html', img=fname)
 
 
-'''Get past thirty minutes of air quality and visulize data'''
+
 @app.route('/thirty_min', methods=['GET', 'POST'])
 def thirty_min():
+    '''return past thirty minutes of air quality and visulize data, save image genrated to static/iamge as png file
+        render html template'''
     global current_time
-    history_30 = get_past_X_min(current_time, 30, df)
+    history_30 = get_past_X_min(current_time, 30, df) #past 30 minutes
     history_30.plot(x='Timestamp', y='pm2.5', marker='.')
     save_images_to = './static/images/'
-    ts = str(int(current_time.timestamp()))
+    ts = str(int(current_time.timestamp())) #uses stringyfied current time timestamp as image file name when it's generated 
     fname = save_images_to + ts + ".png"
     plt.savefig(fname)
-    #plt.show()
+    #plt.show() for debugging 
     return render_template('thirty.html', img=fname)
 
 
-'''Return to Main Page'''
+
 @app.route('/main_return', methods=['GET', 'POST'])
 def main_return():
-    return render_template('base.html') #there is a small problem here, when it returns back to base.html home() does not see to run without clicking the button. It's not consistent but will do for now. 
+    '''Return to Main Page'''
+    return render_template('base.html') 
 
 
-# remove these 2 lines if you want to run this code on pythonanywhere
 if __name__ == '__main__':
     app.run(debug=True, port=5006)

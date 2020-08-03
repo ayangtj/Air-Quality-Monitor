@@ -8,7 +8,7 @@ import random
 import numpy as np
 import pandas as pd
 
-
+'''Unpacks simulator data table '''
 df = pd.read_pickle('1hr_sim.p')
 
 
@@ -43,19 +43,12 @@ def get_curr_value(current_time, df):
 
 
 def current_quality(curr_time, indicator_value):
-    """classifies air quality (indicator_value) at current time (curr_time)
+    '''classifies air quality (indicator_value) at current time (curr_time)
        and returns a string: 'healthy', 'moderate', and 'unhealthy'.
-    """
-
-    # CH I don't understand why you return curr_time. Why would
-    # the user of the function need something returned that he
-    # already gave the function? This would only make sense
-    # if your function CHANGES curr_time, then the call would be
-    # ct = current_quality(ct, indicator_value)
-    # updated              old
-
-    # Also, it's way more flexible to return just the 'core' message 
-    # and leave it up to the caller to wrap that core into a nicer message. 
+       air quality is healthy if the pm2.5 is lower than 50,
+       air qulity is moderate if the pm2.5 is btween 50 and 150,
+       air quality is unhealthy if the pm2.5 is over 150.
+    ''' 
     if indicator_value < 50: 
         return "Healthy"
     elif 50 <= indicator_value < 150: 
