@@ -25,6 +25,7 @@ app = Flask(__name__)
 '''Start the simulator at 10:00:06'''
 start_time = df.loc[df.index[0], 'Timestamp'] + datetime.timedelta(seconds=500) # got this from file! + 5 secs
 current_time = start_time
+user_email = input('Input the email address you would like to use to recieve alert: ') #user to input their email address to receive alert
 #print(current_time) = 10:00:06
 
 
@@ -71,7 +72,7 @@ def home():
     
     
     sender_email = 'aquser41@gmail.com' #email security reference has been adjusted  
-    receiver_email = 'aquser41@gmail.com' #this email address was created specifically for the purpose of this project 
+    receiver_email = user_email #user email has user input function so user can input the preferred email address to recieve alerts  
 
     subject = 'Air Quality Alert' #email subject 
 
