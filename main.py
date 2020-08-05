@@ -42,14 +42,17 @@ except Exception as e:
 
 @app.route('/')
 def home():
-    '''increase timestamp by 3 seconds each reading, dsipaly current time on the main page'''
-    '''takes the average reading of the past 5 seconds (-win_size+1, 1) as average air quality value. Send email to user when the average air quality value is above 150'''
-    '''email subject: Air Quality Alert 
+    '''increase timestamp by 3 seconds each reading, dsipaly current time on the main page
+
+    takes the average reading of the past 5 seconds (-win_size+1, 1) as average air quality value. Send email to user when the average air quality value is above 150
+
+    email subject: Air Quality Alert 
        sender's eamil: aquser41@gmail.com
        receiver's email: aquser41@gmail.com
        sender's email password: python#project1
-       email content: on xdate xtime, your air quality became unhealthy. Air quality reading was averaging x.'''
-    '''Display air quality value, air quality class, and air quality message in html file, render html template.'''
+       email content: on xdate xtime, your air quality became unhealthy. Air quality reading was averaging x.
+       
+    Display air quality value, air quality class, and air quality message in html file, render html template.'''
     global current_time
 
     try:
@@ -105,7 +108,10 @@ def home():
 
 
 def get_past_X_min(curr_time, min, df):
-    ''' return subset of the last min minutes in df, counting backwards from curr_time to x seconds'''
+    ''' return subset of the last min minutes in df, counting backwards from curr_time to x seconds
+        return df frame: 
+        frame begins from time in past
+        frame ends with current time'''
     time_in_past = current_time - datetime.timedelta(minutes=min)
     print("getting data for time from", time_in_past, 'to', curr_time) # DEBUG
     return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)] 
@@ -115,8 +121,18 @@ def get_past_X_min(curr_time, min, df):
 
 @app.route('/five_min', methods=['GET', 'POST'])
 def five_min():
-    '''return past five minutes of air quality and visulize data, save image genrated to static/iamge as png file
-        render html template'''
+    '''return past five minutes of air quality and visulize data
+    
+    Args: 
+        1. stops at current time
+        2. begins at past 5 min
+        3. section of df
+        
+    saves new section as new (smaller) df 
+    plots image and saves to static folder
+    
+    return: 
+        saved image in html '''
     global current_time
     history_5 = get_past_X_min(current_time, 5, df) #past 5 min
     history_5.plot(x='Timestamp', y='pm2.5', marker='.')
@@ -131,8 +147,18 @@ def five_min():
 
 @app.route('/ten_min', methods=['GET', 'POST'])
 def ten_min():
-    '''return past ten minutes of air quality and visulize data, save image genrated to static/iamge as png file
-        render html template'''
+    '''return past ten minutes of air quality and visulize data
+    
+    Args: 
+        1. stops at current time
+        2. begins at past 10 min
+        3. section of df
+        
+    saves new section as new (smaller) df 
+    plots image and saves to static folder
+    
+    return: 
+        saved image in html '''
     global current_time
     history_10 = get_past_X_min(current_time, 10, df) #past 10 min
     history_10.plot(x='Timestamp', y='pm2.5', marker='.')
@@ -147,8 +173,18 @@ def ten_min():
 
 @app.route('/thirty_min', methods=['GET', 'POST'])
 def thirty_min():
-    '''return past thirty minutes of air quality and visulize data, save image genrated to static/iamge as png file
-        render html template'''
+    '''return past thirty minutes of air quality and visulize data
+    
+    Args: 
+        1. stops at current time
+        2. begins at past 30 min
+        3. section of df
+        
+    saves new section as new (smaller) df 
+    plots image and saves to static folder
+    
+    return: 
+        saved image in html '''
     global current_time
     history_30 = get_past_X_min(current_time, 30, df) #past 30 minutes
     history_30.plot(x='Timestamp', y='pm2.5', marker='.')
