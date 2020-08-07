@@ -61,7 +61,7 @@ The list of requirements listed below are for the Air-Quality-Monitor app.
 ## Installation
 
 for main.py
-- Use pip to install the required third party packages: <code>pip -r requirements.txt</code>, do this step after downloading the app folder
+- Use pip to install the required third party packages: <code>pip install -r requirements.txt</code>, do this step after downloading the app folder
   
 for run_package.py
 - Use pip to build and install package as a local package and install required packages
