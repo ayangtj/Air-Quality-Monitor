@@ -70,8 +70,8 @@ for run_package.py
 ## Usage
 
 - Download the app folder at https://github.com/ayangtj/Air-Quality-Monitor by clicking on [Code] > [Download ZIP]
-- main.py: Lunch the terminal on MacOS, user command <code> cd app-route-folder-path</code>to navigate to the app root folder. Use <code>python3 main.py</code>to run the app in terminal. 
-- To terminate server, use 'Contril+C' in terminal. 
+- main.py: Launch the terminal on MacOS, user command <code> cd app-route-folder-path</code>to navigate to the app root folder. Use <code>python3 main.py</code>to run the app in terminal. 
+- To terminate server, use 'Control + C' in terminal. 
 
 ## Code Examples
 
@@ -117,12 +117,12 @@ time_in_past = current_time - datetime.timedelta(minutes=min)
 print("getting data for time from", time_in_past, 'to', curr_time)  
 return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)]  
 
-# Know Issues 
+# Known Issues 
 
-- The simulated data only runs for an hour, starting at 06/10/2020 10:00:06.
+- The simulated data only runs for an hour(to demonstrate the concept of this project), starting at 06/10/2020 10:00:06.
 - User input feature allows user to input the preferred email address to receive the alerts. However since it runs on Flask, user has to input the email address twice. 
 
-# Ackonwledgments 
+# Acknowledgement
   
 - simulates data generation in the format of a wave https://stackoverflow.com/questions/14058340/adding-noise-to-a-signal-in-python
 - sending emails with python https://realpython.com/python-send-email/
