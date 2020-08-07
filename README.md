@@ -4,6 +4,7 @@
 2. functions.py: uses a simple package (called package) that can be downlaoded via GitHub.
 3. simulator.py: uses a simple package (called package) that can be downlaoded via GitHub.
 
+
 ## Requirements
 
 The list of requirements listed below are for the Air-Quality-Monitor app. 
@@ -60,16 +61,17 @@ The list of requirements listed below are for the Air-Quality-Monitor app.
 ## Installation
 
 for main.py
-- Use pip to install the required third party packages: 'pip -r requirements.txt'
+- Use pip to install the required third party packages: <code>pip -r requirements.txt</code>, do this step after downloading the app folder
   
 for run_package.py
 - Use pip to build and install package as a local package and install required packages
-- Open a OS terminal, go into the project root folder and type: pip install . (<- dot!)
+- Open a OS terminal, go into the project root folder and type: <code>pip install . (<- dot!)</code>
 
 ## Usage
 
-- main.py: run it in the project root folder, so it can import from the packages folder
-- run_packages.py: can be run from any folder once it's been installed locally
+- Download the app folder at https://github.com/ayangtj/Air-Quality-Monitor by clicking on [Code] > [Download ZIP]
+- main.py: Lunch the terminal on MacOS, user command <code> cd app-route-folder-path</code>to navigate to the app root folder. Use <code>python3 main.py</code>to run the app in terminal. 
+- To terminate server, use 'Contril+C' in terminal. 
 
 ## Code Examples
 
@@ -127,14 +129,8 @@ return df[(df['Timestamp'] > time_in_past) & (df['Timestamp'] <= current_time)]
   
 # Screenshots 
 
-* current air quality
-![current air quality](./docs/current.png)
+* Download app from GitHub
+![Download from GitHub](./docs/github.png)
 
-* past five minutes of air quality
-![past five minutes air quality](./docs/five.png)
-
-* past five minutes of air quality
-![past ten minutes air quality](./docs/ten.png)
-
-* past five minutes of air quality
-![past thirty minutes air quality](./docs/thirty.png)
+* Run the app via command line
+![Run app via command line](./docs/CLI.png)

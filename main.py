@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
 from matplotlib import pyplot as plt 
 from flask import Flask, render_template, request, url_for, redirect 
 import datetime

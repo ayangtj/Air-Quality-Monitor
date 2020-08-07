@@ -12,10 +12,13 @@ The Air Quality Monitor displays the current air pm2.5 reading and refreshes eve
 
 ## Install/Deployment/Admin issues: 
 
+- If the App folder is downloaded to the Download folder, move the app folder to Desktop or Document. Sometimes running the app directly when it's in the Download folder via command line, there are potential issues of not finding the command. 
+
+
 ## Walkthrough 
 
-- Data structure 
-
+- Data flow structure 
+  ![Data Flow Structure](./docs/data_structure.png)
 
 
 
@@ -42,4 +45,5 @@ The Air Quality Monitor displays the current air pm2.5 reading and refreshes eve
 
 - User Management can be implemented, including creating and managing multiple user account.  
 - If not full user management, the user input funciton can be implemented for any user who installs this app to have the option to input their own email address to receive the unhealthy air quality alerts.  
+- The standalone executable has been created via py2app (for MacOS), however encoutered error "no module named matplotlib". Research shows this could be a common issue for python3. Not resolved at this moment.  
 
