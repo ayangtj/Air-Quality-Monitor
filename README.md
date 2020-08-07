@@ -70,6 +70,7 @@ for run_package.py
 ## Usage
 
 - Download the app folder at https://github.com/ayangtj/Air-Quality-Monitor by clicking on [Code] > [Download ZIP]
+- If the defaul download location is the download folder on macos, move project folder to desktop 
 - main.py: Launch the terminal on MacOS, user command <code> cd app-route-folder-path</code>to navigate to the app root folder. Use <code>python3 main.py</code>to run the app in terminal. 
 - To terminate server, use 'Control + C' in terminal. 
 
